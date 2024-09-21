@@ -1,0 +1,43 @@
+{
+    "manifest_version": 3,
+    "name": "WP_Utils",
+    "version": "1.0",
+    "description": "Provides different utilities for WP Development. By Josue Nadal.",
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "josue.nadalrodriguez@gmail.com"
+        }
+    },
+    "action": {
+        "default_icon": {
+            "16": "icons/wp_util_logo_16.png",
+            "64": "icons/wp_util_logo_64.png"
+        },
+        "default_title": "WP_Utils",
+        "default_popup": "pages/popup.html"
+    },
+    "options_ui": {
+        "page": "pages/options.html"
+    },
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "contextMenus",
+        "menus",
+        "storage",
+        "scripting"
+    ],
+    "icons": {
+        "16": "icons/wp_util_logo_16.png",
+        "32": "icons/wp_util_logo_32.png",
+        "64": "icons/wp_util_logo_64.png",
+        "512": "icons/wp_util_logo_512.png"
+    },
+    "background": {
+        "scripts": [
+            "scripts/tab_menu.js",
+            "scripts/background_script_caller.js"
+        ],
+        "type": "module"
+    }
+}

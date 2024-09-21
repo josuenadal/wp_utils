@@ -1,0 +1,46 @@
+{
+	"Descriptor": [
+		{
+			"name": "Ambiental",
+			"fields": [
+				[
+					"#title",
+					""
+				],
+				[
+					"#new-post-slug",
+					""
+				],
+				[
+					"[name=\"file[acf_MaterialdeReferencia_Nombre]\"]",
+					""
+				],
+				[
+					"[name=\"file[acf_MaterialdeReferencia_Fecha]\"]",
+					""
+				]
+			]
+		},
+		{
+			"name": "Report",
+			"fields": [
+				[
+					"#title",
+					""
+				],
+				[
+					"#new-post-slug",
+					""
+				],
+				[
+					"[name=\"file[acf_Reportes_Nombre]\"]",
+					""
+				],
+				[
+					"[name=\"file[acf_Reportes_ano]\"]",
+					""
+				]
+			]
+		}
+	]
+}

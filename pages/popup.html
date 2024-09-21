@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<style>
+		html {
+			background-color: #212529;
+			font-family: Arial, Helvetica, sans-serif;
+		}
+
+		.form-container {
+			margin: 25px;
+			width: 400px;
+		}
+
+		.form-container h3 {
+			color: white;
+		}
+
+		form {
+			border: 1px solid #ccc;
+			border-radius: 10px;
+			background-color: #212529;
+			display: flex;
+			flex-direction: column;
+			column-gap: 15px;
+			margin-top: 15px;
+		}
+
+		.form-title {
+			z-index: 0;
+		}
+
+		.form-title h3 {
+			color: white;
+			margin: 0;
+			padding: 25px;
+		}
+
+		.form-title h3:hover {
+			cursor: pointer;
+		}
+
+		.form-entries-container {
+			width: 100%;
+			display: flex;
+			flex-grow: 1;
+			flex-direction: column;
+		}
+
+		.form-container .form-element {
+			margin-top: 15px;
+		}
+
+		.form-entry {
+			border-top: 2px white solid;
+			color: white;
+			padding: 35px;
+			padding-top: 0;
+			margin: 0;
+		}
+
+		.form-element input,
+		.form-element textarea {
+			margin-top: 5px;
+			border: 1px solid #ccc;
+			background-color: #343a40;
+			color: white;
+			border-radius: 5px;
+			line-height: 2;
+			width: 75%;
+		}
+
+		.form-entry textarea {
+			height: 100%;
+		}
+
+		.submit {
+			align-self: flex-end;
+			justify-content: flex-start;
+			flex-grow: 1;
+			flex-shrink: 0;
+		}
+
+		.submit button {
+			background-color: #343a40;
+			font-size: 20px;
+			border-radius: 5px;
+			color: white;
+			padding: 5px 20px 5px 20px;
+		}
+
+		.hidden {
+			display: none;
+		}
+
+		.prevent-select {
+			-webkit-user-select: none;
+			/* Safari */
+			-ms-user-select: none;
+			/* IE 10 and IE 11 */
+			user-select: none;
+			/* Standard syntax */
+		}
+	</style>
+</head>
+
+<body>
+	<div class="form-container">
+		<h3>Paster</h3>
+	</div>
+	<script src="popup.js"></script>
+</body>
+
+</html>
