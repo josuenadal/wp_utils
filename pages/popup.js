@@ -137,9 +137,9 @@ function generate_popup(result) {
         "beforeend",
         '<div class="form-element"><label>' +
           json.Descriptor[Desc]["fields"][f][0] +
-          '</label><br><input type="text" value="' +
-          json.Descriptor[Desc]["fields"][f][1] +
-          '" /></div>'
+          '</label><br><input type="text" value=\'' +
+          json.Descriptor[Desc]["fields"][f][1].replace(/"/g, '&quot;').replace(/'/g, '&apos;') +
+          '\' /></div>'
       );
     }
 
