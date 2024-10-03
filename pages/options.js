@@ -31,6 +31,8 @@ document.addEventListener("DOMContentLoaded", restore_options);
 
 //  Function that returns the options from the extension storage.
 async function restore_options() {
+
+  // Put the content into the page.
   function restoreCSSSelector(selector, value) {
     if (value != undefined) {
       document.querySelector(selector).value = value;

@@ -41,6 +41,55 @@
 					""
 				]
 			]
+		},
+		{
+			"name": "Acuerdos",
+			"fields": [
+				[
+					"#title",
+					""
+				],
+				[
+					"#new-post-slug",
+					""
+				],
+				[
+					"[name=\"file[acf_Acuerdos_Socio]\"]",
+					""
+				],
+				[
+					"[name=\"file[acf_Acuerdos_DUNS]\"]",
+					""
+				],
+				[
+					"[name=\"file[acf_Acuerdos_Ejecucion]\"]",
+					""
+				],
+				[
+					"[name=\"file[acf_Acuerdos_Vencimiento]\"]",
+					""
+				],
+				[
+					"[name=\"file[acf_Acuerdos_Total]\"]",
+					""
+				],
+				[
+					"[name=\"file[acf_Acuerdos_Descripcion]\"]",
+					""
+				],
+				[
+					"[name=\"file[acf_Acuerdos_Programa]\"]",
+					""
+				],
+				[
+					"[name=\"file[acf_Acuerdos_asignacion]\"]",
+					""
+				],
+				[
+					"[name=\"file[acf_Acuerdos_Subasta]\"]",
+					""
+				]
+			]
 		}
 	]
 }

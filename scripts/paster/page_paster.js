@@ -1,21 +1,25 @@
 "use strict";
 
+
+//   ██████╗ ██╗   ██╗██╗ ██████╗██╗  ██╗        ██████╗  █████╗ ███████╗████████╗███████╗██████╗ 
+//  ██╔═══██╗██║   ██║██║██╔════╝██║ ██╔╝        ██╔══██╗██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗
+//  ██║   ██║██║   ██║██║██║     █████╔╝         ██████╔╝███████║███████╗   ██║   █████╗  ██████╔╝
+//  ██║▄▄ ██║██║   ██║██║██║     ██╔═██╗         ██╔═══╝ ██╔══██║╚════██║   ██║   ██╔══╝  ██╔══██╗
+//  ╚██████╔╝╚██████╔╝██║╚██████╗██║  ██╗███████╗██║     ██║  ██║███████║   ██║   ███████╗██║  ██║
+//   ╚══▀▀═╝  ╚═════╝ ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝
+//   
+
 //
 //
 //			Listen for the message from the backend with form obj for fields to paste to
 //
 //
 
-if (!browser.runtime.onMessage.hasListener(descriptor_receiver)) {
-  browser.runtime.onMessage.addListener(descriptor_receiver).then(console.log("Added descriptor message receiver.")).catch(onError);
-}
+browser.runtime.onMessage.addListener(descriptor_receiver);
 
 function descriptor_receiver(message) {
-
-  console.log("Page_paster received a message.");
-
   if (message.key == "descriptor") {
-    console.log("Received the descriptors for copying.");
+    console.log("Page_paster received message with descriptors.");
     paste_data(message.value);
   }
   return Promise.resolve({ response: "Received descriptors" });
@@ -35,7 +39,7 @@ function paste_data(descriptors) {
     var selector = descriptors.Fields[i][0];
     var value = descriptors.Fields[i][1];
 
-    console.log(" pairs = " + selector + " and " + value);
+    // console.log(" pairs = " + selector + " and " + value);
 
     if (hooks_handler(selector, value)) {
       continue;

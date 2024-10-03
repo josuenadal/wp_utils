@@ -1,22 +1,34 @@
 "use strict";
 
+//  ███████╗██╗  ██╗ ██████╗ ██████╗ ████████╗ ██████╗ ██████╗ ██████╗ ███████╗        ██╗  ██╗ █████╗ ███╗   ██╗██████╗ ██╗     ███████╗██████╗ 
+//  ██╔════╝██║  ██║██╔═══██╗██╔══██╗╚══██╔══╝██╔════╝██╔═══██╗██╔══██╗██╔════╝        ██║  ██║██╔══██╗████╗  ██║██╔══██╗██║     ██╔════╝██╔══██╗
+//  ███████╗███████║██║   ██║██████╔╝   ██║   ██║     ██║   ██║██║  ██║█████╗          ███████║███████║██╔██╗ ██║██║  ██║██║     █████╗  ██████╔╝
+//  ╚════██║██╔══██║██║   ██║██╔══██╗   ██║   ██║     ██║   ██║██║  ██║██╔══╝          ██╔══██║██╔══██║██║╚██╗██║██║  ██║██║     ██╔══╝  ██╔══██╗
+//  ███████║██║  ██║╚██████╔╝██║  ██║   ██║   ╚██████╗╚██████╔╝██████╔╝███████╗███████╗██║  ██║██║  ██║██║ ╚████║██████╔╝███████╗███████╗██║  ██║
+//  ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═╝
+//                                                                                                                                               
+
 //
 //			Listen for the message from the backend with the stored shortcode
 //			when you switch to another editing tab.
 //
-if (!browser.runtime.onMessage.hasListener(shortcode_listener)) {
+
+if(browser.runtime.onMessage.hasListener(shortcode_listener) == false){
   browser.runtime.onMessage.addListener(shortcode_listener);
 }
 
-function shortcode_listener(message) {
+const once = {
+  once: true,
+};
 
-  console.log("Page_shortcode_handler received a message");
-  if ((message.key == "copiedShortcode") & (message.key != null)) {
+function shortcode_listener(message) {
+  if ((message.key == "copiedShortcode")) {
+    console.log("Page_shortcode_handler received shortcodes");
     localStorage.setItem(message.key, message.value);
   } else if (message.key == "setListeners") {
+    console.log("Page_shortcode_handler received setListeners message");
     document.querySelectorAll(".column_copy, .vc_control-btn-copy").forEach((btn) => {
-      btn.removeEventListener("click", copyClicked);
-      btn.addEventListener("click", copyClicked,{once: true});
+      btn.addEventListener("click", copyClicked, once);
     });
     return Promise.resolve({ response: "Good messages" });
   }
@@ -27,8 +39,7 @@ function shortcode_listener(message) {
 //
 
 document.querySelectorAll(".column_copy, .vc_control-btn-copy").forEach((btn) => {
-  btn.removeEventListener("click", copyClicked,{once: true});
-  btn.addEventListener("click", copyClicked,{once: true});
+  btn.addEventListener("click", copyClicked,once);
 });
 
 //

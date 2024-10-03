@@ -39,5 +39,6 @@
             "scripts/background_script_caller.js"
         ],
         "type": "module"
-    }
+    },
+    "optional_host_permissions": ["*://*/*"]
 }

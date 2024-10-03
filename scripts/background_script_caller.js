@@ -1,8 +1,26 @@
+//  ██████╗  █████╗  ██████╗██╗  ██╗ ██████╗ ██████╗  ██████╗ ██╗   ██╗███╗   ██╗██████╗         ███████╗ ██████╗██████╗ ██╗██████╗ ████████╗
+//  ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝ ██╔══██╗██╔═══██╗██║   ██║████╗  ██║██╔══██╗        ██╔════╝██╔════╝██╔══██╗██║██╔══██╗╚══██╔══╝
+//  ██████╔╝███████║██║     █████╔╝ ██║  ███╗██████╔╝██║   ██║██║   ██║██╔██╗ ██║██║  ██║        ███████╗██║     ██████╔╝██║██████╔╝   ██║   
+//  ██╔══██╗██╔══██║██║     ██╔═██╗ ██║   ██║██╔══██╗██║   ██║██║   ██║██║╚██╗██║██║  ██║        ╚════██║██║     ██╔══██╗██║██╔═══╝    ██║   
+//  ██████╔╝██║  ██║╚██████╗██║  ██╗╚██████╔╝██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝███████╗███████║╚██████╗██║  ██║██║██║        ██║   
+//  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ ╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝   
+//                                                                                                                                           
+
 //
 //			Listen for tab changes
 //
-if (!browser.tabs.onActivated.hasListener((event) => handle_tab_event(event))) {
-  browser.tabs.onActivated.addListener((event) => handle_tab_event(event));
+
+async function get_filter(){
+  const permissionsArray = await browser.permissions.getAll().then((r) => r.origins);
+  const filter = {
+    urls: permissionsArray,
+    properties: ["status"],
+  };
+  return filter;
+}
+
+if(browser.tabs.onUpdated.hasListener(handle_tab_event, await get_filter()) == false){
+  browser.tabs.onUpdated.addListener(handle_tab_event, await get_filter());
 }
 
 //
@@ -13,28 +31,14 @@ if (!browser.tabs.onActivated.hasListener((event) => handle_tab_event(event))) {
 
 async function send_shortcode_message(tabId) {
 
-  var tab = await browser.tabs
+  const tab = await browser.tabs
     .get(tabId)
     .then()
     .catch(onError);
 
-  var left_link = await browser.storage.local
-    .get("Left_Env_Link")
-    .then((result) => {
-      return result.Left_Env_Link;
-    })
-    .catch(onError);
+  console.log("Sending message to tab " + tabId);
 
-  var right_link = await browser.storage.local
-    .get("Right_Env_Link")
-    .then((result) => {
-      return result.Right_Env_Link;
-    })
-    .catch(onError);
-
-  console.log("Sending message to tab ".concat(tabId));
-
-  var stored_shortcode = await browser.storage.local
+  const stored_shortcode = await browser.storage.local
     .get("stored_shortCode")
     .then((result) => {
       return result.stored_shortCode;
@@ -44,13 +48,16 @@ async function send_shortcode_message(tabId) {
   await browser.tabs.sendMessage(tabId, { key: "copiedShortcode", value: stored_shortcode })
     .then(console.log("Succesfully sent message to ".concat(tab.url)))
     .catch(onError);
+  
+  await browser.tabs.sendMessage(tabId, { key: "setListeners", value: ""})
+  .then(console.log("Succesfully sent setListeners message to ".concat(tab.url)))
+  .catch(onError);
 }
 
 async function execute_scripts(tabId) {
   await browser.scripting.executeScript({
     target: {
       tabId: tabId,
-      allFrames: true,
     },
     files: ["scripts/shortcode/page_shortcode_handler.js"],
   });
@@ -58,24 +65,23 @@ async function execute_scripts(tabId) {
   await browser.scripting.executeScript({
     target: {
       tabId: tabId,
-      allFrames: true,
     },
     files: ["scripts/paster/page_paster.js"],
   });
 
-  send_shortcode_message(tabId).then();
+  await send_shortcode_message(tabId);
 }
 
 async function initial_run() {
 
-  var permissionsArray = await browser.permissions.getAll().then((r) => r.origins);
+  const permissionsArray = await browser.permissions.getAll().then((r) => r.origins);
 
-  var tabs = await browser.tabs.query({});
+  const tabs = await browser.tabs.query({});
 
   tabs.forEach((tab) => {
     var tabHostname = new URL(tab.url).hostname;
     if (check_permissions_for_url(permissionsArray, tabHostname) == true) {
-      console.log("going into => " + tab.url)
+      console.log("Interacting with => " + tab.url);
       
       execute_scripts(tab.id)
         .then()
@@ -86,17 +92,28 @@ async function initial_run() {
 
 }
 
-async function handle_tab_event(tab){
+async function get_tab_url(tabId){
+  const tabs = await browser.tabs.query({});
 
-  var tabHostname = new URL(tab.url).hostname;
+  for (let i = 0; i < tabs.length; i++) {
+    if (tabs[i].id == tabId) {
+      return new URL(tabs[i].url).hostname;
+    }
+  }
+  return "";
+}
 
-  var permissionsArray = await browser.permissions.getAll().then((r) => r.origins);
-
-  check_permissions_for_url(permissionsArray, tabHostname);
+async function handle_tab_event(tabId, changeInfo, tab){
+  
+  if(changeInfo.status == "complete"){
+    execute_scripts(tabId)
+      .then()
+      .catch(handle_missing_hosts_error);
+  }
 }
 
 function check_permissions_for_url(permissions, tabHostname) {
-
+  
   if(tabHostname == ""){
     return false;
   }
@@ -106,9 +123,7 @@ function check_permissions_for_url(permissions, tabHostname) {
       return true;
     }
   }
-  permissions.forEach((permissionUrl) => {
-    
-  });
+
   return false;
 }
 
