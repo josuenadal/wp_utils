@@ -11,7 +11,7 @@
 
 //
 //
-//			Listen for the message from the backend with form obj for fields to paste to
+// Listen for the message from the backend with form obj for fields to paste to
 //
 //
 
@@ -27,7 +27,7 @@ function descriptor_receiver(message) {
 
 //
 //
-//			Use descriptor fields and values to paste info onto the fields of the page.
+// Use descriptor fields and values to paste info onto the fields of the page.
 //
 //
 
@@ -36,10 +36,10 @@ function paste_data(descriptors) {
 
   for (let i = 0; i < descriptors.Fields.length; i++) {
 
-    var selector = descriptors.Fields[i][0];
-    var value = descriptors.Fields[i][1];
+    var selector = descriptors.Fields[i].CSS_Selector;
+    var value = descriptors.Fields[i].value;
 
-    // console.log(" pairs = " + selector + " and " + value);
+    console.log(" pairs = " + selector + " and " + value);
 
     if (hooks_handler(selector, value)) {
       continue;
@@ -61,31 +61,27 @@ function hooks_handler(field, value){
 
   if ((field == "#new-post-slug")) {
     console.log("New post")
-    new_post_slug_handler(field,value);
+    new_post_slug_hook(field,value);
     return true;
   }
 
 }
 
-function new_post_slug_handler(field, value){
-  document.querySelector("button.edit-slug").click();
-  document.querySelector("#new-post-slug").value = value;
-  document.querySelector("#edit-slug-buttons button.save").click();
-}
+// New post slug hook that clicks on a field, then adds the value and confirms it. 
 
-var wp_utils_debug_val = true;
-
-function wp_utils_debug_output(msg) {
-  if (wp_utils_debug_val) {
-    console.log(msg);
+function new_post_slug_hook(field, value){
+  try{
+    document.querySelector("button.edit-slug").click();
+    document.querySelector("#new-post-slug").value = value;
+    document.querySelector("#edit-slug-buttons button.save").click();
+  } catch(error){
+    console.log("Error in the new_post_slug_hook hook.")
+    console.error(error)
   }
-  return;
 }
+
+// Misc Functions.
 
 function onError(error) {
-  console.error(`Error: ${error}`);
-}
-
-function msg(msg) {
-  console.log(msg);
+  console.error(error)
 }

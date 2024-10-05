@@ -1,94 +1,174 @@
 {
-	"Descriptor": [
+	"Forms": [
 		{
 			"name": "Ambiental",
 			"fields": [
-				[
-					"#title",
-					""
-				],
-				[
-					"#new-post-slug",
-					""
-				],
-				[
-					"[name=\"file[acf_MaterialdeReferencia_Nombre]\"]",
-					""
-				],
-				[
-					"[name=\"file[acf_MaterialdeReferencia_Fecha]\"]",
-					""
-				]
+				{
+					"field_name": "Page Title",
+					"CSS_Selector": "#title",
+					"type": "text"
+				},
+				{
+					"field_name": "Page Slug",
+					"CSS_Selector": "#new-post-slug",
+					"type": "text"
+				},
+				{
+					"field_name": "Nombre",
+					"CSS_Selector": "[name=\"file[acf_MaterialdeReferencia_Nombre]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Fecha",
+					"CSS_Selector": "[name=\"file[acf_MaterialdeReferencia_Fecha]\"]",
+					"type": "date",
+					"value": "2024-10-03"
+				}
 			]
 		},
 		{
-			"name": "Report",
+			"name": "Reporte",
 			"fields": [
-				[
-					"#title",
-					""
-				],
-				[
-					"#new-post-slug",
-					""
-				],
-				[
-					"[name=\"file[acf_Reportes_Nombre]\"]",
-					""
-				],
-				[
-					"[name=\"file[acf_Reportes_ano]\"]",
-					""
-				]
+				{
+					"field_name": "Page Title",
+					"CSS_Selector": "#title",
+					"type": "text"
+				},
+				{
+					"field_name": "Page Slug",
+					"CSS_Selector": "#new-post-slug",
+					"type": "text"
+				},
+				{
+					"field_name": "Report Name",
+					"CSS_Selector": "[name=\"file[acf_Reportes_Nombre]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Report Name",
+					"CSS_Selector": "[name=\"file[acf_Reportes_ano]\"]",
+					"type": "date"
+				}
 			]
 		},
 		{
 			"name": "Acuerdos",
 			"fields": [
-				[
-					"#title",
-					""
-				],
-				[
-					"#new-post-slug",
-					""
-				],
-				[
-					"[name=\"file[acf_Acuerdos_Socio]\"]",
-					""
-				],
-				[
-					"[name=\"file[acf_Acuerdos_DUNS]\"]",
-					""
-				],
-				[
-					"[name=\"file[acf_Acuerdos_Ejecucion]\"]",
-					""
-				],
-				[
-					"[name=\"file[acf_Acuerdos_Vencimiento]\"]",
-					""
-				],
-				[
-					"[name=\"file[acf_Acuerdos_Total]\"]",
-					""
-				],
-				[
-					"[name=\"file[acf_Acuerdos_Descripcion]\"]",
-					""
-				],
-				[
-					"[name=\"file[acf_Acuerdos_Programa]\"]",
-					""
-				],
-				[
-					"[name=\"file[acf_Acuerdos_asignacion]\"]",
-					""
-				],
-				[
-					"[name=\"file[acf_Acuerdos_Subasta]\"]",
-					""
-				]
+				{
+					"field_name": "Page Title",
+					"CSS_Selector": "#title",
+					"type": "text"
+				},
+				{
+					"field_name": "Page Slug",
+					"CSS_Selector": "#new-post-slug",
+					"type": "text"
+				},
+				{
+					"field_name": "Socio/Subrecipiente",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Socio]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "DUNS",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_DUNS]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Ejecucion Acuerdo",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Ejecucion]\"]",
+					"type": "date"
+				},
+				{
+					"field_name": "Vencimiento Acuerdo",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Vencimiento]\"]",
+					"type": "date"
+				},
+				{
+					"field_name": "Cantidad Total",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Total]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Descripción",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Descripcion]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Programa",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Programa]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Enlace a Subasta",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Subasta]\"]",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"name": "Contrato",
+			"fields": [
+				{
+					"field_name": "Page Title",
+					"CSS_Selector": "#title",
+					"type": "text"
+				},
+				{
+					"field_name": "Page Slug",
+					"CSS_Selector": "#new-post-slug",
+					"type": "text"
+				},
+				{
+					"field_name": "Solicitado por",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Solicitado]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "DUNS",
+					"CSS_Selector": "[name=\"file[acf_Contratos_DUNS]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Ejecucion Contrato",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Ejecucion]\"]",
+					"type": "date"
+				},
+				{
+					"field_name": "Vencimiento Contrato",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Vencimiento]\"]",
+					"type": "date"
+				},
+				{
+					"field_name": "Cantidad Total",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Total]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Cantidad de Fondos",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Fondos]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Descripción",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Descripcion]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Numero de Contrato",
+					"CSS_Selector": "[name=\"file[acf_Contratos_numero_de_contrato]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Asignacion",
+					"CSS_Selector": "[name=\"file[acf_Contratos_asignacion]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Enlace a Subasta",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Subasta]\"]",
+					"type": "text"
+				}
 			]
 		}
 	]

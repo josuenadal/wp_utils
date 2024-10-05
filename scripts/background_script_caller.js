@@ -7,7 +7,7 @@
 //                                                                                                                                           
 
 //
-//			Listen for tab changes
+// Listen for when a tab finishes loading
 //
 
 async function get_filter(){
@@ -23,37 +23,16 @@ if(browser.tabs.onUpdated.hasListener(handle_tab_event, await get_filter()) == f
   browser.tabs.onUpdated.addListener(handle_tab_event, await get_filter());
 }
 
-//
-//			When you switch tabs this will detect if it is one of the configured domains,
-//			then it will retreive the shortcode from the browser storage and
-//			send it to the tab as a message.
-//
+// When tab finishes loading, send scripts and messages to tab.
 
-async function send_shortcode_message(tabId) {
-
-  const tab = await browser.tabs
-    .get(tabId)
-    .then()
-    .catch(onError);
-
-  console.log("Sending message to tab " + tabId);
-
-  const stored_shortcode = await browser.storage.local
-    .get("stored_shortCode")
-    .then((result) => {
-      return result.stored_shortCode;
-    })
-    .catch(onError);
-
-  await browser.tabs.sendMessage(tabId, { key: "copiedShortcode", value: stored_shortcode })
-    .then(console.log("Succesfully sent message to ".concat(tab.url)))
-    .catch(onError);
+async function handle_tab_event(tabId, changeInfo, tab){
   
-  await browser.tabs.sendMessage(tabId, { key: "setListeners", value: ""})
-  .then(console.log("Succesfully sent setListeners message to ".concat(tab.url)))
-  .catch(onError);
+  if(changeInfo.status == "complete"){
+    await execute_scripts(tabId);
+  }
 }
 
+// Send scripts to tab, as well as message containing any stored shortcode.
 async function execute_scripts(tabId) {
   await browser.scripting.executeScript({
     target: {
@@ -69,8 +48,41 @@ async function execute_scripts(tabId) {
     files: ["scripts/paster/page_paster.js"],
   });
 
-  await send_shortcode_message(tabId);
+  // Send messages to perform actions on the tab.
+  await send_addon_messages(tabId);
 }
+
+async function send_addon_messages(tabId) {
+
+  const tab = await browser.tabs
+    .get(tabId)
+    .then()
+    .catch(onError);
+
+  console.log("Sending message to tab " + tabId);
+
+  // Send stored shortcodes to tab, so tab can set them into local storage.
+  const stored_shortcode = await browser.storage.local
+    .get("stored_shortCode")
+    .then((result) => {
+      return result.stored_shortCode;
+    })
+    .catch(onError);
+  
+  if(typeof stored_shortcode != undefined | stored_shortcode != null)
+  {
+    await browser.tabs.sendMessage(tabId, { key: "copiedShortcode", value: stored_shortcode })
+      .then(console.log("Succesfully sent message to ".concat(tab.url)))
+      .catch(onError);
+  }
+
+  // Send setListeners message to add listeners to WPBakery copy btns.
+  await browser.tabs.sendMessage(tabId, { key: "setListeners", value: ""})
+  .then(console.log("Succesfully sent setListeners message to ".concat(tab.url)))
+  .catch(onError);
+}
+
+// Functions for initial run of addon. Makes sure all configured pages have the scripts ready.
 
 async function initial_run() {
 
@@ -78,38 +90,15 @@ async function initial_run() {
 
   const tabs = await browser.tabs.query({});
 
-  tabs.forEach((tab) => {
+  await tabs.forEach((tab) => {
     var tabHostname = new URL(tab.url).hostname;
     if (check_permissions_for_url(permissionsArray, tabHostname) == true) {
       console.log("Interacting with => " + tab.url);
       
-      execute_scripts(tab.id)
-        .then()
-        .catch(handle_missing_hosts_error);
+      execute_scripts(tab.id);
 
     }
   });
-
-}
-
-async function get_tab_url(tabId){
-  const tabs = await browser.tabs.query({});
-
-  for (let i = 0; i < tabs.length; i++) {
-    if (tabs[i].id == tabId) {
-      return new URL(tabs[i].url).hostname;
-    }
-  }
-  return "";
-}
-
-async function handle_tab_event(tabId, changeInfo, tab){
-  
-  if(changeInfo.status == "complete"){
-    execute_scripts(tabId)
-      .then()
-      .catch(handle_missing_hosts_error);
-  }
 }
 
 function check_permissions_for_url(permissions, tabHostname) {
@@ -127,14 +116,22 @@ function check_permissions_for_url(permissions, tabHostname) {
   return false;
 }
 
-function handle_missing_hosts_error(err) {
-  if (err.message != "Missing host permission for the tab or frames") {
-    onError(err);
+// Run
+await initial_run()
+
+//
+// Listen for key command CTRL+SHIFT+F1
+//
+
+browser.commands.onCommand.addListener((command) => {
+  if (command === "open_sidebar") {
+    browser.sidebarAction.open()
+    console.log("Opening sidebar!");
   }
-}
+});
+
+// Misc Functions
 
 function onError(error) {
   console.error(`Error: ${error.message}`);
 }
-
-initial_run().then().catch(onError);

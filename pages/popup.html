@@ -10,8 +10,7 @@
 		}
 
 		.form-container {
-			margin: 25px;
-			width: 400px;
+			margin: 15px;
 		}
 
 		.form-container h3 {
@@ -35,7 +34,11 @@
 		.form-title h3 {
 			color: white;
 			margin: 0;
-			padding: 25px;
+			padding: 12px;
+		}
+
+		.form-title small {
+			width: min-content;
 		}
 
 		.form-title h3:hover {
@@ -43,7 +46,6 @@
 		}
 
 		.form-entries-container {
-			width: 100%;
 			display: flex;
 			flex-grow: 1;
 			flex-direction: column;
@@ -56,9 +58,11 @@
 		.form-entry {
 			border-top: 2px white solid;
 			color: white;
-			padding: 35px;
-			padding-top: 0;
+			padding: 0 20px 20px 20px;
 			margin: 0;
+			max-height: 20000px;
+			transition: max-height 0.25s ease-in;
+			overflow: hidden;
 		}
 
 		.form-element input,
@@ -69,11 +73,6 @@
 			color: white;
 			border-radius: 5px;
 			line-height: 2;
-			width: 75%;
-		}
-
-		.form-entry textarea {
-			height: 100%;
 		}
 
 		.submit {
@@ -91,8 +90,17 @@
 			padding: 5px 20px 5px 20px;
 		}
 
-		.hidden {
+		/* .hidden {
 			display: none;
+		} */
+
+		.hidden {
+			border-top: unset;
+			transition: all 0.15s ease-out;
+			max-height: 0;
+			overflow: hidden;
+			padding-bottom: 0;
+			margin: 0;
 		}
 
 		.prevent-select {
@@ -108,7 +116,7 @@
 
 <body>
 	<div class="form-container">
-		<h3>Paster</h3>
+		<h3>Quick Paster</h3>
 	</div>
 	<script src="popup.js"></script>
 </body>

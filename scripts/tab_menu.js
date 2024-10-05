@@ -91,7 +91,7 @@ async function open_Opp_Handler(event) {
 }
 
 function onError(error) {
-  console.error(`Error: ${error}`);
+  console.error(error)
 }
 
 add_Opp_menu();

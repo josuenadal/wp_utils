@@ -1,167 +1,93 @@
-async function send_form_data_to_tab(form_id) {
-  console.log("\tCreating object from form " + form_id);
-
-  var formObj = get_submitted_form_fields_json_obj_for_pasting(form_id);
-
-  const tab = await browser.tabs
-    .query({ currentWindow: true, active: true })
-    .then()
-    .catch(onError);
-
-  await browser.tabs
-    .sendMessage(tab[0].id, { key: "descriptor", value: formObj })
-    .then(msg("Succesfully sent descriptors form obj"))
-    .catch(onError);
-}
-
-function get_submitted_form_fields_json_obj_for_pasting(CSSSelector) {
-  let formObj = { Fields: {} };
-
-  let field_Arr = [];
-
-  var matches = document.querySelectorAll(CSSSelector + " .form-element");
-
-  for (let i = 0; i < matches.length; i++) {
-    if (!matches[i].classList.contains("submit")) {
-      var label = matches[i].querySelector("label").innerText;
-      var field = matches[i].querySelector("input").value;
-      formObj.Fields[label] = field;
-      field_Arr.push([label, field]);
-    }
-  }
-
-  formObj.Fields = field_Arr;
-
-  return formObj;
-}
-
-function get_descriptor_obj_from_all_forms(CSSSelector) {
-  let formObj = { Descriptor: {} };
-  let desc_array = [];
-  let des_obj = {};
-
-  var matches = document.querySelectorAll("form");
-
-  for (let i = 0; i < matches.length; i++) {
-    des_obj = {};
-
-    var id = matches[i].id;
-    var name = matches[i].querySelector(".form-title H3").innerText;
-    let fieldObj = get_submitted_form_fields_json_obj_for_pasting("#" + id);
-
-    des_obj["name"] = name;
-    des_obj["fields"] = fieldObj.Fields;
-
-    desc_array.push(des_obj);
-  }
-  formObj.Descriptor = desc_array;
-
-  console.log("Form obj for upload = " + JSON.stringify(formObj));
-  return formObj;
-}
+//
+//
+//
+// Loaded popup/sidebar
+//
+//
+//
 
 document.addEventListener("DOMContentLoaded", get_descriptors_from_storage);
 
 async function get_descriptors_from_storage() {
-  console.log("Opened pop up.");
+  console.log("Opened.");
 
-  var changed = await browser.storage.local.get("Changed_Descriptors");
+  const changed = await browser.storage.local.get("Changed_Descriptors");
 
   if (changed.Changed_Descriptors == true) {
+    // if(true){
     // Get Descriptors and generate pop up with em.
-    browser.storage.local
-      .get("Descriptors")
-      .then((result) => {
-        generate_popup(JSON.parse(result.Descriptors));
-        browser.storage.local.set({
-          Func_Descriptors: JSON.parse(result.Descriptors),
-        });
-      })
-      .catch(onError);
+    browser.storage.local.get("Descriptors").then((result) => {
+      // console.log("descriptors type: " + typeof result)
+      generate_popup(JSON.parse(result.Descriptors));
+      browser.storage.local.set({
+        Func_Descriptors: result.Descriptors,
+      });
+    });
 
     browser.storage.local.set({ Changed_Descriptors: false }).then(msg("Done"));
   } else {
     // Get Descriptors and generate pop up with em.
-    browser.storage.local
-      .get("Func_Descriptors")
-      .then((result) => generate_popup(result.Func_Descriptors))
-      .catch(onError);
+    browser.storage.local.get("Func_Descriptors").then((result) => {
+      generate_popup(JSON.parse(result.Func_Descriptors));
+    });
   }
-
-  return Promise.resolve({ response: "Received descriptors" });
 }
 
+// Basically the whole page is generated in this function.
+
 function generate_popup(result) {
-  if (result == undefined) {
-    print_message_only(
-      "No descriptors loaded.<br>Please load descriptors in the extension configuration page."
-    );
+  // console.log(result)
+
+  if ((result == undefined) | (result.Forms == 0)) {
+    print_message_only("No descriptors loaded. <br>Please load descriptors in the extension configuration page.");
     return;
   }
 
-  console.log(result);
-  let json = result;
-  var id_count = 0;
+  let forms = result.Forms;
 
-  for (const Desc in json.Descriptor) {
-    id_count += 1;
-    // console.log(json.Descriptor[Desc])
-    var id_string = "entry_" + id_count;
+  for (const form_iter in forms) {
+    let current_form = forms[form_iter];
+    let id_string = "entry_" + form_iter;
 
     document
       .querySelector(".form-container")
       .insertAdjacentHTML(
         "beforeend",
-        '<form id="' +
-          id_string +
-          '"> <div class="form-entries-container"> <div class="form-entry"> </div> </div> </form>'
+        '<form id="' + id_string + '"> ' +
+          '<div class="form-entries-container">' +
+            '<div class="form-title prevent-select">' +
+              '<h3 class="prevent-select">' + current_form["name"] + "</h3>" +
+            "</div>" +
+            '<div class="form-entry">' +
+            "</div>" +
+          "</div>" +
+        "</form>"
       );
 
-    var form_entry = document.querySelector("#" + id_string + " .form-entry");
+    document.querySelector("#" + id_string + " .form-title").addEventListener("click", toggle);
 
-    document
-      .querySelector("#" + id_string + " .form-entries-container")
-      .insertAdjacentHTML(
-        "afterbegin",
-        '<div class="form-title prevent-select"><h3 class="prevent-select">' +
-          json.Descriptor[Desc]["name"] +
-          "</h3></div>"
-      );
+    let form_entry = document.querySelector("#" + id_string + " .form-entry");
 
-    document
-      .querySelector("#" + id_string + " .form-title")
-      .addEventListener("click", toggle, { once: true });
-
-    for (const f in json.Descriptor[Desc]["fields"]) {
+    for (const field_iter in current_form["fields"]) {
+      let val = parse_field_value(current_form["fields"][field_iter].value);
+      let type = parse_field_type(current_form["fields"][field_iter].type);
       form_entry.insertAdjacentHTML(
         "beforeend",
-        '<div class="form-element"><label>' +
-          json.Descriptor[Desc]["fields"][f][0] +
-          '</label><br><input type="text" value=\'' +
-          json.Descriptor[Desc]["fields"][f][1].replace(/"/g, '&quot;').replace(/'/g, '&apos;') +
-          '\' /></div>'
+        '<div class="form-element">' +
+          '<label>' + current_form["fields"][field_iter].field_name + '</label>' +
+          '<br>' +
+          '<small>' + current_form["fields"][field_iter].CSS_Selector + '</small>' +
+          '<br>' +
+          '<input type="' + type + '\" value=\"' + val + '\" />' +
+        "</div>"
       );
     }
 
-    form_entry.insertAdjacentHTML(
-      "beforeend",
-      '<div class="form-element submit"><button type="submit">Paste</button></div>'
-    );
+    form_entry.insertAdjacentHTML("beforeend", '<div class="form-element submit"><button>Paste</button></div>');
 
-    document
-      .querySelector("#" + id_string + " button")
-      .addEventListener("click", handle_form_submit, { once: true });
+    document.querySelector("#" + id_string + " button").addEventListener("click", handle_paste_click, { once: true });
 
-    console.log(
-      "\tGenerated " + id_string + ": " + json.Descriptor[Desc]["name"]
-    );
-  }
-
-  if (id_count == 0) {
-    print_message_only(
-      "No descriptors loaded. <br>Please load descriptors in the extension configuration page."
-    );
-    return;
+    console.log("\tGenerated " + id_string + ": " + current_form["name"]);
   }
 
   add_listeners_to_inputs();
@@ -169,50 +95,30 @@ function generate_popup(result) {
   console.log("Done.");
 }
 
+//
+// Functions for handling form creation
+//
+
+let acceptableTypes = ["text", "date"];
+
+function parse_field_value(value_string) {
+  if (typeof value_string == "undefined") {
+    return "";
+  } else {
+    return value_string.replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+  }
+}
+
+function parse_field_type(type_string) {
+  if ((typeof type_string == "undefined") | !acceptableTypes.includes(type_string.toLowerCase())) {
+    return "text";
+  } else {
+    return type_string.toLowerCase();
+  }
+}
+
 function print_message_only(msg) {
-  document
-    .querySelector(".form-container")
-    .insertAdjacentHTML("beforeend", "<h3>" + msg + "</h3>");
-}
-
-function toggle(event) {
-  var open_it = false;
-  if (this.nextElementSibling.classList.contains("hidden")) {
-    open_it = true;
-  }
-
-  hide_forms();
-
-  if (open_it) {
-    this.nextElementSibling.classList.remove("hidden");
-  }
-}
-
-function handle_form_submit(event) {
-  event.preventDefault();
-  send_form_data_to_tab(
-    "#" + this.parentElement.parentElement.parentElement.parentElement.id
-  );
-}
-
-function handle_form_change(event) {
-  upload_form();
-}
-
-function msg(msg) {
-  console.log(msg);
-}
-
-function onError(error) {
-  console.log(`Error: ${error}`);
-}
-
-function add_listeners_to_inputs() {
-  var inputs = document.getElementsByTagName("input");
-  for (let i = 0; i < inputs.length; i++) {
-    inputs[i].addEventListener("change", handle_form_change, { once: true });
-  }
-  hide_forms();
+  document.querySelector(".form-container").insertAdjacentHTML("beforeend", "<h3>" + msg + "</h3>");
 }
 
 function hide_forms() {
@@ -221,10 +127,116 @@ function hide_forms() {
   }
 }
 
-function upload_form() {
+//
+// Functions for handling form events
+//
+
+function add_listeners_to_inputs() {
+  let inputs = document.getElementsByTagName("input");
+  for (let i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener("change", handle_form_change, { once: true });
+  }
+  hide_forms();
+}
+
+function toggle(event) {
+  let hidden = this.nextElementSibling.classList.contains("hidden");
+  hide_forms();
+  if (hidden) {
+    this.nextElementSibling.classList.remove("hidden");
+  } else {
+    this.nextElementSibling.classList.add("hidden");
+  }
+}
+
+function handle_form_change(event) {
+  upload_form();
+}
+
+//
+// Functions for form field update, always upload form changes for persistence
+//
+
+async function upload_form() {
   console.log("\tCreating form obj to upload...");
 
-  var formObj = get_descriptor_obj_from_all_forms();
-  console.log(formObj);
-  browser.storage.local.set({ Func_Descriptors: formObj });
+  let formObj = await turn_all_forms_back_into_json();
+  await browser.storage.local.set({ Func_Descriptors: JSON.stringify(formObj) }).then();
+}
+
+async function turn_all_forms_back_into_json() {
+  let desc_array = [];
+  let des_obj = [];
+
+  let matches = document.querySelectorAll("form");
+
+  for (let i = 0; i < matches.length; i++) {
+    desc_array = [];
+
+    let name = document.querySelector("#entry_" + i + " h3").innerText;
+
+    let form_elements = document.querySelectorAll("#entry_" + i + " .form-element");
+    for (let j = 0; j < form_elements.length; j++) {
+      if (!form_elements[j].classList.contains("submit")) {
+        let name = form_elements[j].querySelector("label").innerText;
+        let css_selector = form_elements[j].querySelector("small").innerText;
+        let value = form_elements[j].querySelector("input").value;
+        let type = form_elements[j].querySelector("input").type;
+        desc_array.push({ field_name: name, CSS_Selector: css_selector, type: type, value: value });
+      }
+    }
+    des_obj.push({ name: name, fields: desc_array });
+  }
+  let formObj = { Forms: des_obj };
+  return formObj;
+}
+
+//
+// Functions for handling paste action
+//
+
+async function handle_paste_click(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  await send_paste_data_to_page_from_form("#" + this.parentElement.parentElement.parentElement.parentElement.id);
+}
+
+async function send_paste_data_to_page_from_form(form_id) {
+  console.log("\tCreating object from form " + form_id);
+
+  let formObj = get_json_paste_data_from_single_form(form_id);
+
+  const tab = await browser.tabs.query({ currentWindow: true, active: true }).then();
+
+  await browser.tabs.sendMessage(tab[0].id, { key: "descriptor", value: formObj }).then(msg("Succesfully sent descriptors form obj"));
+}
+
+function get_json_paste_data_from_single_form(CSSSelector) {
+  let formObj = { Fields: {} };
+  let field_Arr = [];
+  let matches = document.querySelectorAll(CSSSelector + " .form-element");
+
+  for (let i = 0; i < matches.length; i++) {
+    if (!matches[i].classList.contains("submit")) {
+      let css_selector = matches[i].querySelector("small").innerText;
+      let value = matches[i].querySelector("input").value;
+
+      field_Arr.push({ CSS_Selector: css_selector, value: value });
+    }
+  }
+
+  formObj.Fields = field_Arr;
+  return formObj;
+}
+
+//
+// Misc functions
+//
+
+function msg(msg) {
+  console.log(msg);
+}
+
+function onError(error) {
+  console.log(error);
 }
