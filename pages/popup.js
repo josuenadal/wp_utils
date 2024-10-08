@@ -56,7 +56,7 @@ function generate_popup(result) {
         '<form id="' + id_string + '"> ' +
           '<div class="form-entries-container">' +
             '<div class="form-title prevent-select">' +
-              '<h3 class="prevent-select">' + current_form["name"] + "</h3>" +
+              '<h4 class="prevent-select">' + current_form["name"] + "</h4>" +
             "</div>" +
             '<div class="form-entry">' +
             "</div>" +
@@ -83,9 +83,9 @@ function generate_popup(result) {
       );
     }
 
-    form_entry.insertAdjacentHTML("beforeend", '<div class="form-element submit"><button>Paste</button></div>');
+    form_entry.insertAdjacentHTML("beforeend", '<div class="form-element submit"><button type="button">Paste</button></div>');
 
-    document.querySelector("#" + id_string + " button").addEventListener("click", handle_paste_click, { once: true });
+    document.querySelector("#" + id_string + " button").addEventListener("click", handle_paste_click);
 
     console.log("\tGenerated " + id_string + ": " + current_form["name"]);
   }
@@ -134,7 +134,7 @@ function hide_forms() {
 function add_listeners_to_inputs() {
   let inputs = document.getElementsByTagName("input");
   for (let i = 0; i < inputs.length; i++) {
-    inputs[i].addEventListener("change", handle_form_change, { once: true });
+    inputs[i].addEventListener("change", handle_form_change);
   }
   hide_forms();
 }
@@ -173,7 +173,7 @@ async function turn_all_forms_back_into_json() {
   for (let i = 0; i < matches.length; i++) {
     desc_array = [];
 
-    let name = document.querySelector("#entry_" + i + " h3").innerText;
+    let name = document.querySelector("#entry_" + i + " h4").innerText;
 
     let form_elements = document.querySelectorAll("#entry_" + i + " .form-element");
     for (let j = 0; j < form_elements.length; j++) {
@@ -196,8 +196,9 @@ async function turn_all_forms_back_into_json() {
 //
 
 async function handle_paste_click(event) {
-  event.preventDefault();
-  event.stopPropagation();
+  // event.preventDefault();
+  // event.stopPropagation();
+  // event.stopImmediatePropagation();
   await send_paste_data_to_page_from_form("#" + this.parentElement.parentElement.parentElement.parentElement.id);
 }
 

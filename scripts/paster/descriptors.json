@@ -170,6 +170,16 @@
 					"type": "text"
 				}
 			]
+		},
+		{
+			"name":"WP Featured Image",
+			"fields":[
+				{
+					"field_name": "Featured Image",
+					"CSS_Selector": "#_thumbnail_id",
+					"type": "text"
+				}
+			]
 		}
 	]
 }

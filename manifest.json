@@ -9,7 +9,7 @@
         }
     },
     "commands": {
-        "open_sidebar": {
+        "_execute_sidebar_action": {
             "suggested_key": {
                 "default": "Ctrl+Shift+F1"
             }
