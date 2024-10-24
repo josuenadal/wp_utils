@@ -1,0 +1,58 @@
+{
+    "manifest_version": 3,
+    "name": "WP_Utils",
+    "version": "1.0",
+    "description": "Provides different utilities for WP Development. By Josue Nadal.",
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "josue.nadalrodriguez@gmail.com"
+        }
+    },
+    "commands": {
+        "_execute_sidebar_action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+F1"
+            }
+        }
+    },
+    "action": {
+        "default_icon": {
+            "16": "icons/wp_util_logo_16.png",
+            "64": "icons/wp_util_logo_64.png"
+        },
+        "default_title": "WP_Utils",
+        "default_popup": "pages/popup.html"
+    },
+    "sidebar_action": {
+        "default_title": "Quick Paster",
+        "default_panel": "pages/popup.html",
+        "default_icon": "icons/wp_util_logo_32.png"
+    },
+    "options_ui": {
+        "page": "pages/options.html"
+    },
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "contextMenus",
+        "menus",
+        "storage",
+        "scripting"
+    ],
+    "icons": {
+        "16": "icons/wp_util_logo_16.png",
+        "32": "icons/wp_util_logo_32.png",
+        "64": "icons/wp_util_logo_64.png",
+        "512": "icons/wp_util_logo_512.png"
+    },
+    "background": {
+        "scripts": [
+            "scripts/background_script_caller.js",
+            "scripts/tab_menu.js"
+        ],
+        "type": "module"
+    },
+    "optional_host_permissions": [
+        "*://*/*"
+    ]
+}

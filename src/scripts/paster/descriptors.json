@@ -1,0 +1,28 @@
+{
+	"Forms": [
+	    {
+	        "name": "Programs",
+			"multi_lang": "true",
+	        "fields": [
+	            {
+	                "field_name": "Program Name",
+	                "CSS_Selector": ["#programInput", "input.programName"],
+					"es_value" : "Programa A",
+					"en_value" : "Program A",
+	                "type": "text"
+	            },
+	            {
+	                "field_name": "Program Type",
+	                "CSS_Selector": "input#programType",
+	                "type": "text"
+	            },
+	            {
+	                "field_name": "Program End",
+	                "CSS_Selector": ".programDateEnd input",
+	                "type": "date",
+	                "value": "2024-01-31"
+	            }
+	        ]
+	    }
+	]
+}

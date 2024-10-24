@@ -1,9 +1,9 @@
 # WPUtils
-This is a firefox web extension for simultaneous UAT and Production environments wordpress development on different domains. 
+This is a firefox web extension for simultaneous development in UAT and Production environments wordpress development on different domains. 
 
 It's main features are:
 * allow copying elements from WPBakery to and from separate domains
-* a paster that lets you configure multiple different forms with JSON for quick pasting (Open with CTRL+SHIFT+F1 or on extensions toolbar as a popup)
+* a paster that lets you configure multiple forms with JSON for quick pasting with CSS Selectors and multi language values (Open with CTRL+SHIFT+F1 or on extensions toolbar as a popup)
 * and allows you to configure 2 different domains so by right clicking on the tab and pressing Open in opposite you can quickly open the equivalent page at the different domain
 
 I add stuff as I need it, if a task is very repetitive I'll probably implement it here.
@@ -19,7 +19,7 @@ Go to about:addons, then click on the extension and the options tab. There you'l
 
 ## Quick Paster
 
-The quick paster allows you to quickly paste data into input elements by specifying a CSS selector for the input and the value you want to paste. It was designed to solve filing out the same data multiple times on diffrent pages. 
+The quick paster allows you to quickly paste data into input elements by specifying CSS selectors (one or many) for the input and the values you want to paste. It was designed to solve filing out the same data multiple times on diffrent pages. 
 
 You can open the Quick Paster sidebar with CTRL+SHIFT+F1 or in the extensions toolbar as a popup.
 
@@ -31,10 +31,13 @@ An example of the descriptors are as follows:
 	"Forms": [
 	    {
 	        "name": "Programs",
+			"multi_lang": "true",
 	        "fields": [
 	            {
 	                "field_name": "Program Name",
-	                "CSS_Selector": "#programInput",
+	                "CSS_Selector": ["#programInput", "input.programName"],
+					"es_value" : "Programa A",
+					"en_value" : "Program A",
 	                "type": "text"
 	            },
 	            {
@@ -58,8 +61,14 @@ You don't need to include the value field, this would simply leave the field emp
 
 Adding the value field just initializes the quick paster with that value. Since the quick paster has persistence any change to the default value will be overrun until new descriptors are submitted in the options page.
 
-The type field corresponds to HTML input types, right now only text and date are supported (this is simply for form generation, if you're targeted element contains a value attribute it will still work).
+The multi_lang field set to "true" ensures the side bar form will contain to input fields, one for english and one for spanish. It will paste the value that corresponds with the page language, the page language defaults to spanish, else it is set to english with the lang query within the url when "lang=en".
+
+The type field corresponds to HTML input types, right now only text and date are supported. This type field is simply for form generation, if you're targeted element contains a value attribute it will still work, since the quick paster just sets the value attribute of the selected element.
 
 The Descriptor above would produce this in the sidebar:
 
 ![Quick Paster Example](./quickpasterexample.png "Quick Paster Example")
+
+### To do
+
+Think i might do most of the logic in JQuery since it might be simpler. And I also am thinking of doing a build process for releases. Works great so far. 
