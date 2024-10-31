@@ -318,13 +318,13 @@ function get_json_paste_data_from_single_form(CSSSelector) {
       
       if(document.querySelector(CSSSelector + " .ml_val").value == "false"){
         let val = matches[i].querySelector("input.all").value;
-        field_Arr.push({ CSS_Selector: css_selector, multi_lang: false, value: val });
+        field_Arr.push({ CSS_Selector: css_selectors, multi_lang: "false", value: val });
       }
       
       if(document.querySelector(CSSSelector + " .ml_val").value == "true"){
         let es_val = matches[i].querySelector("input.es").value;
         let en_val = matches[i].querySelector("input.en").value;
-        field_Arr.push({ CSS_Selector: css_selectors, multi_lang: true, es_value: es_val, en_value: en_val });
+        field_Arr.push({ CSS_Selector: css_selectors, multi_lang: "true", es_value: es_val, en_value: en_val });
       }
     }
   }

@@ -37,12 +37,13 @@ function paste_data(descriptors) {
     let selectors = descriptors.Fields[i].CSS_Selector;
     let ml_val = descriptors.Fields[i].multi_lang;
     
-    let val = descriptors.Fields[i].val;
+    let val = descriptors.Fields[i].value;
     let es_val = descriptors.Fields[i].es_value;
     let en_val = descriptors.Fields[i].en_value;
+    console.log(selectors, ml_val, val, es_val, en_val)
 
     let value = "";
-    if( ml_val == false ){
+    if( ml_val == "false" ){
       value = val;
     }
     else{
