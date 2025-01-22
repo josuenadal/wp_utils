@@ -23,6 +23,12 @@ function descriptor_receiver(message) {
     paste_data(message.value);
     return Promise.resolve({ response: "GOOD" });
   }
+
+  if (message.key == "FindFirstEmpty"){
+    console.log("Page_paster listener received FindFirstEmpty message.");
+    FindFirstEmpty(message.value);
+    return Promise.resolve({ response: "GOOD" });
+  }
 }
 
 //
@@ -108,6 +114,36 @@ function new_post_slug_hook(field, value){
   } catch(error){
     console.log("Error in the new_post_slug_hook hook.")
     console.error(error)
+  }
+}
+
+// Find First Empty value and scroll to it
+
+function FindFirstEmpty(value)
+{
+  let parent = document.querySelector(value);
+  console.log("selector: " + value);
+  // If its a wordpress postbox, make sure its open.
+  if(parent.classList.contains("postbox") && parent.classList.contains("closed"))
+  {
+    parent.classList.remove("closed");
+  }
+  let children = parent.querySelectorAll("input");
+  console.log(" Children size: " + children.length)
+  for (let i = 0; i < children.length; i++) {
+    let input = children[i];
+    console.log("input " + input.value);
+    if(input.value == "")
+      {
+        window.scrollTo({
+          behavior: 'smooth',
+          top:
+          input.getBoundingClientRect().top -
+            document.body.getBoundingClientRect().top -
+            100,
+        })
+        return;
+      }
   }
 }
 

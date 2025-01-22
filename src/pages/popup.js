@@ -14,10 +14,11 @@ async function get_descriptors_from_storage() {
   const changed = await browser.storage.local.get("Changed_Descriptors");
 
   if (changed.Changed_Descriptors == true) {
-    // if(true){
     // Get Descriptors and generate pop up with em.
     browser.storage.local.get("Descriptors").then((result) => {
-      // console.log("descriptors type: " + typeof result)
+      console.log("descriptors type: " + typeof result)
+      
+      console.log("descriptors: " + result)
       generate_popup(JSON.parse(result.Descriptors));
       browser.storage.local.set({
         Func_Descriptors: result.Descriptors,
@@ -28,7 +29,14 @@ async function get_descriptors_from_storage() {
   } else {
     // Get Descriptors and generate pop up with em.
     browser.storage.local.get("Func_Descriptors").then((result) => {
-      generate_popup(JSON.parse(result.Func_Descriptors));
+      console.log(result)
+      console.log(result.Func_Descriptors)
+      if(result.Func_Descriptors == undefined){
+        console.log("Descriptors are empty.");
+      }
+      else{
+        generate_popup(JSON.parse(result.Func_Descriptors));
+      }
     });
   }
 }
@@ -299,8 +307,13 @@ async function send_paste_data_to_page_from_form(form_id) {
 
   const tab = await browser.tabs.query({ currentWindow: true, active: true }).then((t)=> {return t[0]});
 
-  await browser.tabs.sendMessage(tab.id, { key: "descriptor", value: formObj })
-    .then((r)=>{if(r.response == "GOOD"){console.log("Sucesfully sent descriptors obj to tab " + tab.url);}}, onError)
+  send_message(tab, "descriptor", formObj);
+}
+
+async function send_message(_tab, _key, _value)
+{
+  await browser.tabs.sendMessage(_tab.id, { key: _key, value: _value })
+    .then((r)=>{if(r.response == "GOOD"){console.log("Sucesfully sent " + _key + " to tab " + _tab.url);}}, onError)
 }
 
 function get_json_paste_data_from_single_form(CSSSelector) {
@@ -338,8 +351,16 @@ function get_json_paste_data_from_single_form(CSSSelector) {
 //
 
 // Not implemented yet...
-function GoToEmptyAmmendment(){
-  document.querySelector("[id='Enmiendas de Contratos']").classList.remove("closed")
+async function GoToEmptyAmmendment(){
+  console.log("Sending FindFirstEmpty Message");
+  const tab = await browser.tabs.query({ currentWindow: true, active: true }).then((t)=> {return t[0]});
+  send_message(tab, "FindFirstEmpty","[id='Enmiendas de Contratos']")
+}
+
+async function GoToEmptySub(){
+  console.log("Sending FindFirstEmpty Message");
+  const tab = await browser.tabs.query({ currentWindow: true, active: true }).then((t)=> {return t[0]});
+  send_message(tab, "FindFirstEmpty","[id='Sub Contratista']")
 }
 
 //
@@ -353,3 +374,8 @@ function msg(msg) {
 function onError(error) {
   console.log(error);
 }
+
+// Quick Action button listeners. 
+document.querySelector("#empty_sub_btn").addEventListener("click", GoToEmptySub);
+
+document.querySelector("#empty_ammendment_btn").addEventListener("click", GoToEmptyAmmendment);
