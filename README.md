@@ -17,6 +17,10 @@ Preconfigure the WP domains in the addons Options page and optionally add "Quick
 
 Go to about:addons, then click on the extension and the options tab. There you'll be able to configure the domains for switching environments as well as the Quick Paster Form Descriptors for pasting.
 
+## Quick Actions
+
+There are currently two quick actions "Find Empty Ammendments" and "Find empty SubContractor" clicking these buttons will quickly find and scroll to the first empty field so the user can edit them quickly. It finds the field with a query selector string which is currently not configurable, but popup.js line 353 contains the caling function.
+
 ## Quick Paster
 
 The quick paster allows you to quickly paste data into input elements by specifying CSS selectors (one or many) for the input and the values you want to paste. It was designed to solve filing out the same data multiple times on diffrent pages. 
@@ -69,6 +73,10 @@ The Descriptor above would produce this in the sidebar:
 
 ![Quick Paster Example](./quickpasterexample.png "Quick Paster Example")
 
+## Quick Paster
+
+Build process is simple. Make sure you have web-ext installed and run "web-ext build" in the repo directory.
+
 ### To do
 
-Think i might do most of the logic in JQuery since it might be simpler. And I also am thinking of doing a build process for releases. Works great so far. 
+Think i might do most of the logic in JQuery since it might be simpler. Works great so far. 

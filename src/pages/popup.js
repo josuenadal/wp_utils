@@ -349,13 +349,14 @@ function get_json_paste_data_from_single_form(CSSSelector) {
 // Quick action buttons
 //
 
-// Not implemented yet...
+// Send message to page scripts to find empty ammendment using a query selector.
 async function GoToEmptyAmmendment(){
   console.log("Sending FindFirstEmpty Message");
   const tab = await browser.tabs.query({ currentWindow: true, active: true }).then((t)=> {return t[0]});
   send_message(tab, "FindFirstEmpty","[id='Enmiendas de Contratos']")
 }
 
+// Send message to page scripts to find empty sub contractor using a query selector.
 async function GoToEmptySub(){
   console.log("Sending FindFirstEmpty Message");
   const tab = await browser.tabs.query({ currentWindow: true, active: true }).then((t)=> {return t[0]});
