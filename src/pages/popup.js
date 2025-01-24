@@ -16,10 +16,13 @@ async function get_descriptors_from_storage() {
   if (changed.Changed_Descriptors == true) {
     // Get Descriptors and generate pop up with em.
     browser.storage.local.get("Descriptors").then((result) => {
-      console.log("descriptors type: " + typeof result)
-      
-      console.log("descriptors: " + result)
-      generate_popup(JSON.parse(result.Descriptors));
+      if(result.Func_Descriptors == undefined){
+        console.log("Descriptors are empty, user must add them in settings.");
+        document.querySelector(".form-container").insertAdjacentHTML("beforeend","<h2 id=\"empty_msg\">There are no descriptors. Please add them in the extension config at about:addons.</h2>")
+      }
+      else{
+        generate_popup(JSON.parse(result.Descriptors));
+      }
       browser.storage.local.set({
         Func_Descriptors: result.Descriptors,
       });
@@ -31,9 +34,9 @@ async function get_descriptors_from_storage() {
     browser.storage.local.get("Func_Descriptors").then((result) => {
       if(result.Func_Descriptors == undefined){
         console.log("Descriptors are empty, user must add them in settings.");
+        document.querySelector(".form-container").insertAdjacentHTML("beforeend","<h2 id=\"empty_msg\">There are no descriptors. Please add them in the extension config at about:addons.</h2>")
       }
       else{
-        document.querySelector("#empty_msg").remove();
         generate_popup(JSON.parse(result.Func_Descriptors));
       }
     });

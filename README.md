@@ -35,13 +35,13 @@ An example of the descriptors are as follows:
 	"Forms": [
 	    {
 	        "name": "Programs",
-			"multi_lang": "true",
+	        "multi_lang": "true",
 	        "fields": [
 	            {
 	                "field_name": "Program Name",
 	                "CSS_Selector": ["#programInput", "input.programName"],
-					"es_value" : "Programa A",
-					"en_value" : "Program A",
+	                "es_value" : "Programa A",
+	                "en_value" : "Program A",
 	                "type": "text"
 	            },
 	            {
@@ -73,9 +73,9 @@ The Descriptor above would produce this in the sidebar:
 
 ![Quick Paster Example](./quickpasterexample.png "Quick Paster Example")
 
-## Quick Paster
+## Build
 
-Build process is simple. Make sure you have web-ext installed and run "web-ext build" in the repo directory.
+Make sure you have web-ext installed and run ``` web-ext build ``` in the repo directory.
 
 ### To do
 
