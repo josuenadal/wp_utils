@@ -44,6 +44,10 @@ function check_permissions_for_url(tabUrl) {
 // Filter for tab changes, we only want the tab status.
 
 async function get_filter(){
+  if(permissionsArray.length == 0)
+  {
+    return;
+  }
   const filter = {
     urls: permissionsArray,
     properties: ["status"],
@@ -109,11 +113,12 @@ async function on_tab_activated(activeInfo){
     const tab = await browser.tabs
       .get(activeInfo.tabId)
     if (check_permissions_for_url(tab.url) == true) {
-      console.log("Tab activated " + tab.url)
-      send_shortcodes_to_tab(activeInfo.tabId);
+      
       // Set listeners on tab activation just in case there are new copy buttons in the page.
       // This should ideally be set to listen for any new copy buttons and then add the listener there.
-      send_set_listeners_message(activeInfo.tabId);
+      
+      console.log("Tab activated " + tab.url)
+      await execute_all_scripts(activeInfo.tabId);
     }
   }
 }

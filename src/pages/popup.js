@@ -29,12 +29,11 @@ async function get_descriptors_from_storage() {
   } else {
     // Get Descriptors and generate pop up with em.
     browser.storage.local.get("Func_Descriptors").then((result) => {
-      console.log(result)
-      console.log(result.Func_Descriptors)
       if(result.Func_Descriptors == undefined){
-        console.log("Descriptors are empty.");
+        console.log("Descriptors are empty, user must add them in settings.");
       }
       else{
+        document.querySelector("#empty_msg").remove();
         generate_popup(JSON.parse(result.Func_Descriptors));
       }
     });
