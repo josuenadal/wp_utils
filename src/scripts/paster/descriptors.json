@@ -1,28 +1,264 @@
 {
 	"Forms": [
-	    {
-	        "name": "Programs",
+		{
+			"name": "Ambiental",
 			"multi_lang": "true",
-	        "fields": [
-	            {
-	                "field_name": "Program Name",
-	                "CSS_Selector": ["#programInput", "input.programName"],
-					"es_value" : "Programa A",
-					"en_value" : "Program A",
-	                "type": "text"
-	            },
-	            {
-	                "field_name": "Program Type",
-	                "CSS_Selector": "input#programType",
-	                "type": "text"
-	            },
-	            {
-	                "field_name": "Program End",
-	                "CSS_Selector": ".programDateEnd input",
-	                "type": "date",
-	                "value": "2024-01-31"
-	            }
-	        ]
-	    }
+			"fields": [
+				{
+					"field_name": "Page Title, slug and name",
+					"CSS_Selector": ["#title", "#new-post-slug", "[name=\"file[acf_MaterialdeReferencia_Nombre]\"]"],
+					"type": "text"
+				},
+				{
+					"field_name": "Fecha",
+					"CSS_Selector": ["[name=\"file[acf_MaterialdeReferencia_Fecha]\"]"],
+					"type": "date",
+					"value": "2025-05-21"
+				},
+				{
+					"field_name": "Category",
+					"CSS_Selector": "Category",
+					"type": "text",
+					"es_value": "Ambiental",
+					"en_value": "Environmental"
+				}
+			]
+		},
+		{
+			"name": "Reporte",
+			"fields": [
+				{
+					"field_name": "Page Title",
+					"CSS_Selector": "#title",
+					"type": "text"
+				},
+				{
+					"field_name": "Page Slug",
+					"CSS_Selector": "#new-post-slug",
+					"type": "text"
+				},
+				{
+					"field_name": "Report Name",
+					"CSS_Selector": "[name=\"file[acf_Reportes_Nombre]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Report Name",
+					"CSS_Selector": "[name=\"file[acf_Reportes_ano]\"]",
+					"type": "date"
+				}
+			]
+		},
+		{
+			"name": "Acuerdos",
+			"multi_lang": "true",
+			"fields": [
+				{
+					"field_name": "Page Title",
+					"CSS_Selector": ["#title","#new-post-slug","[name=\"file[acf_Acuerdos_Socio]\"]"],
+					"type": "text"
+				},
+				{
+					"field_name": "DUNS",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_DUNS]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Ejecucion Acuerdo",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Ejecucion]\"]",
+					"type": "date"
+				},
+				{
+					"field_name": "Vencimiento Acuerdo",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Vencimiento]\"]",
+					"type": "date"
+				},
+				{
+					"field_name": "Cantidad Total",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Total]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Descripción",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Descripcion]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Programa",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Programa]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Enlace a Subasta",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Subasta]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Asignacion",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_asignacion]\"]",
+					"type": "text",
+					"value": "MIT"
+				},
+				{
+					"field_name": "Category",
+					"CSS_Selector": "!Category",
+					"type": "text",
+					"es_value": "Acuerdos",
+					"en_value": "Written Agreements"
+				},
+				{
+					"field_name": "WPDMTemplate",
+					"CSS_Selector": "!WPDMTemplate",
+					"type": "text",
+					"es_value": "Pag de Acuerdos",
+					"en_value": "Pag de Acuerdos EN"
+				}
+			]
+		},
+		{
+			"name":"Acuerdos SEO PROD",
+			"multi_lang":"true",
+			"fields":[
+				{
+					"field_name": "YOAST SEO Page Title",
+					"CSS_Selector": ["input#yoast_wpseo_title","input#yoast_wpseo_opengraph-title","input#yoast_wpseo_twitter-title"],
+					"type": "text",
+					"es_value": "%%title%% - Acuerdos - Recuperación Fondos CDBG-DR/MIT",
+					"en_value": "%%title%% - Written Agreements - CDBG-DR/MIT Recovery Funds"
+				},
+				{
+					"field_name": "YOAST SEO Social Media Description",
+					"CSS_Selector": ["input#yoast_wpseo_metadesc","input#yoast_wpseo_opengraph-description","input#yoast_wpseo_opengraph-description"],
+					"type": "text"
+				},
+				{
+					"field_name": "YOAST SEO Social Media Image Link",
+					"CSS_Selector": ["input#yoast_wpseo_opengraph-image","input#yoast_wpseo_twitter-image"],
+					"type": "text",
+					"value": "https://recuperacion.pr.gov/wp-content/uploads/2024/01/sharecard-es.jpg"
+				},
+				{
+					"field_name": "Featured Image",
+					"CSS_Selector": ["#_thumbnail_id","input#yoast_wpseo_opengraph-image-id","input#yoast_wpseo_twitter-image-id"],
+					"type": "text",
+					"es_value": "53369",
+					"en_value": "53367"
+				}
+			]
+		},
+		{
+			"name":"Acuerdos SEO UAT",
+			"multi_lang":"true",
+			"fields":[
+				{
+					"field_name": "YOAST SEO Page Title",
+					"CSS_Selector": ["input#yoast_wpseo_title","input#yoast_wpseo_opengraph-title","input#yoast_wpseo_twitter-title"],
+					"type": "text",
+					"es_value": "%%title%% - Acuerdos - Recuperación Fondos CDBG-DR/MIT",
+					"en_value": "%%title%% - Written Agreements - CDBG-DR/MIT Recovery Funds"
+				},
+				{
+					"field_name": "YOAST SEO Social Media Description",
+					"CSS_Selector": ["input#yoast_wpseo_metadesc","input#yoast_wpseo_opengraph-description","input#yoast_wpseo_opengraph-description"],
+					"type": "text"
+				},
+				{
+					"field_name": "YOAST SEO Social Media Image Link",
+					"CSS_Selector": ["input#yoast_wpseo_opengraph-image","input#yoast_wpseo_twitter-image"],
+					"type": "text",
+					"value": "https://recuperacion-uat.itdgpr.com/wp-content/uploads/2024/01/sharecard-en.jpg"
+				},
+				{
+					"field_name": "Featured Image",
+					"CSS_Selector": ["#_thumbnail_id","input#yoast_wpseo_opengraph-image-id","input#yoast_wpseo_twitter-image-id"],
+					"type": "text",
+					"es_value": "52378",
+					"en_value": "52381"
+				}
+			]
+		},
+		{
+			"name": "Contrato",
+			"multi_lang": "true",
+			"fields": [
+				{
+					"field_name": "Page Title",
+					"CSS_Selector": ["#title","#new-post-slug"],
+					"type": "text"
+				},
+				{
+					"field_name": "Solicitado por",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Solicitado]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "DUNS",
+					"CSS_Selector": "[name=\"file[acf_Contratos_DUNS]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Ejecucion Contrato",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Ejecucion]\"]",
+					"type": "date"
+				},
+				{
+					"field_name": "Vencimiento Contrato",
+					"CSS_Selector": "[name=\"file[acf_Acuerdos_Vencimiento]\"]",
+					"type": "date"
+				},
+				{
+					"field_name": "Cantidad Total",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Total]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Cantidad de Fondos",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Fondos]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Descripción",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Descripcion]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Numero de Contrato",
+					"CSS_Selector": "[name=\"file[acf_Contratos_numero_de_contrato]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Asignacion",
+					"CSS_Selector": "[name=\"file[acf_Contratos_asignacion]\"]",
+					"type": "text"
+				},
+				{
+					"field_name": "Enlace a Subasta",
+					"CSS_Selector": "[name=\"file[acf_Contratos_Subasta]\"]",
+					"type": "text"
+				}
+			]
+		},
+		{
+			"name":"Featured Image Sharecard EN UAT",
+			"fields":[
+				{
+					"field_name": "Featured Image",
+					"CSS_Selector": "#_thumbnail_id",
+					"type": "text",
+					"value": "52381"
+				}
+			]
+		},
+		{
+			"name":"Featured Image Sharecard ES UAT",
+			"fields":[
+				{
+					"field_name": "Featured Image",
+					"CSS_Selector": "#_thumbnail_id",
+					"type": "text",
+					"value": "52378"
+				}
+			]
+		}
 	]
 }

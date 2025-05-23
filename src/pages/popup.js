@@ -133,6 +133,7 @@ function generate_popup(result) {
   }
 
   add_listeners_to_inputs();
+  add_paste_function_to_dates();
   hide_forms();
   console.log("Done.");
 }
@@ -220,6 +221,33 @@ function add_listeners_to_inputs() {
     inputs[i].addEventListener("change", handle_form_change);
   }
   hide_forms();
+}
+
+function add_paste_function_to_dates(){
+  // get all date input fields
+  document.querySelectorAll('[type="date"]').forEach(el => {
+    // register double click event to change date input to text input and select the value
+    el.addEventListener('dblclick', () => {
+        el.type = "text";
+        
+        // After changing input type with JS .select() wont work as usual
+        // Needs timeout fn() to make it work
+        setTimeout(() => {
+          el.select();
+        })
+    });
+    
+    // register the focusout event to reset the input back to a date input field
+    el.addEventListener('focusout', () => {
+        console.log(el.value)
+        const date_ = new Date(el.value.replace("/","-"));
+        console.log("newval: "+date_.toISOString().substring(0,10))
+        el.value = date_.toISOString().substring(0,10);
+        el.type = "date";
+        el.dispatchEvent(new Event('change'));
+    });
+  });
+  console.log("Done setting dates")
 }
 
 function toggle(event) {

@@ -42,7 +42,7 @@ function paste_data(descriptors) {
 
     let selectors = descriptors.Fields[i].CSS_Selector;
     let ml_val = descriptors.Fields[i].multi_lang;
-    
+    console.log(descriptors.Fields)
     let val = descriptors.Fields[i].value;
     let es_val = descriptors.Fields[i].es_value;
     let en_val = descriptors.Fields[i].en_value;
@@ -98,7 +98,19 @@ function hooks_handler(field, value){
 
   if ((field == "#new-post-slug")) {
     console.log("New post")
-    new_post_slug_hook(field,value);
+    new_post_slug_hook(value);
+    return true;
+  }
+  
+  if ((field == "!Category")) {
+    console.log("Category")
+    category_hook(value);
+    return true;
+  }
+
+  if ((field == "!WPDMTemplate")) {
+    console.log("WPDMTemplate")
+    wpdm_template(value);
     return true;
   }
 
@@ -106,7 +118,7 @@ function hooks_handler(field, value){
 
 // New post slug hook that clicks on a field, then adds the value and confirms it. 
 
-function new_post_slug_hook(field, value){
+function new_post_slug_hook(value){
   try{
     document.querySelector("button.edit-slug").click();
     document.querySelector("#new-post-slug").value = value;
@@ -116,6 +128,73 @@ function new_post_slug_hook(field, value){
     console.error(error)
   }
 }
+
+function category_hook(value){
+
+  let wpm_categories = $("#wpdmcategory-all #wpdmcategorychecklist li");
+  let categories = $("#category-all #categorychecklist li");
+  let active_cat = categories;
+  
+  if (wpm_categories.length == 0){
+    active_cat = categories
+  }
+  else{
+    active_cat = wpm_categories
+  }
+
+  let cats = get_category_table(active_cat);
+
+  let cat = cats.find((c) => { return c["name"] === value })
+
+  if (cat != undefined){
+    cat.input_element.checked = true
+    console.log("Set category " + value)
+  }
+
+}
+
+function get_category_table(category_nodes){
+  // Go through category list and create an object of the possible elements.
+  var category_list = [];
+  $(category_nodes).each(function() {
+    
+    var category_element = $(this);
+    let obj = {};
+    
+    var input = category_element.get(0).firstChild.firstChild;
+    var name = category_element.children("label").text().trim()
+    var ul = category_element.children("ul").get(0);
+
+    if(ul != undefined)
+    {
+      ul = get_category_table(ul.children)
+    }
+
+    obj = {
+      "name": name,
+      "input_element": input,
+      "subcategories": ul
+      };
+    category_list.push(obj);
+  })
+  return category_list;
+}
+
+function wpdm_template(value){
+  let cat_span = document.querySelector("span.select2-selection.select2-selection--single");
+  cat_span.focus()
+  cat_span.click()
+
+  let input = document.querySelector(".select2-search input.select2-search__field");
+  input.value = value;
+
+  let results = document.querySelector(".select2-pge_tpl-results li")
+  if (results == null){
+    console.error("No template found.")
+  }
+  results.click()
+}
+
 
 // Find First Empty value and scroll to it
 
@@ -150,12 +229,13 @@ function FindFirstEmpty(value)
 // Misc Functions.
 
 function get_page_lang(){
-  let params = new URL(window.location.href).searchParams;
-  let lang = params.get("lang");
-  if(lang != null){
-    return lang.toUpperCase();
+  console.log("Getting page lang...")
+  var lang = document.querySelector("#wp-admin-bar-WPML_ALS .ab-item span").innerText.trim().slice(0, 2).toUpperCase();
+  if (lang == "SP" | lang == ""){
+    lang = "ES"
   }
-  return "ES";
+  console.log("lang: " + lang)
+  return lang;
 }
 
 function onError(error) {
