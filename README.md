@@ -1,10 +1,11 @@
 # WPUtils
-This is a firefox web extension for simultaneous development in UAT and Production environments wordpress development on different domains. 
+This is a firefox web extension for simultaneous development in UAT and Production environments of a wordpress site.  
 
 It's main features are:
 * allow copying elements from WPBakery to and from separate domains
-* a paster that lets you configure multiple forms with JSON for quick pasting with CSS Selectors and multi language values (Open with CTRL+SHIFT+F1 or on extensions toolbar as a popup)
-* and allows you to configure 2 different domains so by right clicking on the tab and pressing Open in opposite you can quickly open the equivalent page at the different domain
+* Quick Paster lets you define different forms in json for... pasting quickly
+* Open with CTRL+SHIFT+F1 or on extensions toolbar as a popup
+* Open same page on different domain
 
 I add stuff as I need it, if a task is very repetitive I'll probably implement it here.
 
